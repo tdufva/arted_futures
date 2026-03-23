@@ -95,6 +95,11 @@
         min-height: 44px;
       }
 
+      .composition-shell {
+        display: grid;
+        gap: 16px;
+      }
+
       .canvas-shell {
         position: relative;
         min-height: 320px;
@@ -115,11 +120,7 @@
       }
 
       .writing-panel {
-        position: absolute;
-        left: clamp(12px, 3vw, 26px);
-        right: clamp(12px, 3vw, 26px);
-        bottom: clamp(12px, 3vw, 26px);
-        z-index: 2;
+        position: relative;
         display: grid;
         gap: 10px;
         padding: 14px 16px 16px;
@@ -337,12 +338,6 @@
           min-height: 68dvh;
         }
 
-        .writing-panel {
-          left: 14px;
-          right: 14px;
-          bottom: 14px;
-        }
-
         .bottom-controls {
           align-content: start;
           justify-content: center;
@@ -365,7 +360,8 @@
         <header id="top-controls" class="top-controls">
           <div id="language-controls" class="language-controls"></div>
         </header>
-        <section id="canvas-shell" class="canvas-shell">
+        <section id="composition-shell" class="composition-shell">
+          <section id="canvas-shell" class="canvas-shell"></section>
           <div class="writing-panel">
             <label id="writing-label" class="writing-label" for="writing-input">WRITE YOUR OWN FUTURE NOTE</label>
             <textarea

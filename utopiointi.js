@@ -76,6 +76,7 @@ let buttonEng;
 let buttonSwe;
 let inspirationLink;
 let appShell;
+let compositionShell;
 let canvasShell;
 let topControls;
 let languageControls;
@@ -176,6 +177,7 @@ function draw() {
 
 function cacheLayoutElements() {
   appShell = select("#app-shell");
+  compositionShell = select("#composition-shell");
   canvasShell = select("#canvas-shell");
   topControls = select("#top-controls");
   languageControls = select("#language-controls");
@@ -522,15 +524,7 @@ function getTextMetrics() {
 
 function getPromptAreaBounds(isLandscapePhone) {
   const topPadding = height * (isLandscapePhone ? 0.1 : 0.12);
-  const defaultBottom = height * (isLandscapePhone ? 0.64 : 0.72);
-
-  if (!writingPanel) {
-    return { top: topPadding, bottom: defaultBottom };
-  }
-
-  const panelTop = writingPanel.elt.offsetTop;
-  const reservedGap = height * (isLandscapePhone ? 0.11 : 0.09);
-  const bottom = constrain(panelTop - reservedGap, height * 0.5, defaultBottom);
+  const bottom = height * (isLandscapePhone ? 0.78 : 0.8);
 
   return { top: topPadding, bottom };
 }
@@ -644,7 +638,7 @@ function getExportText() {
 }
 
 async function captureComposition() {
-  return html2canvas(canvasShell.elt, {
+  return html2canvas(compositionShell.elt, {
     backgroundColor: null,
     scale: min(window.devicePixelRatio || 1, 2),
     useCORS: true,
