@@ -80,6 +80,7 @@ let canvasShell;
 let topControls;
 let languageControls;
 let actionControls;
+let writingPanel;
 let writingLabel;
 let writingInput;
 let currentPrompt = null;
@@ -179,6 +180,7 @@ function cacheLayoutElements() {
   topControls = select("#top-controls");
   languageControls = select("#language-controls");
   actionControls = select("#action-controls");
+  writingPanel = select(".writing-panel");
   writingLabel = select("#writing-label");
   writingInput = select("#writing-input");
 }
@@ -478,7 +480,7 @@ function drawPromptResults() {
   const metrics = getTextMetrics();
   const textBoxX = width * 0.09;
   const textBoxWidth = width * 0.82;
-  const textBoxHeight = height * 0.12;
+  const textBoxHeight = metrics.promptBoxHeight;
 
   drawLanguagePrompt();
 
@@ -496,17 +498,35 @@ function getTextMetrics() {
   const shortSide = min(width, height);
   const isNarrow = width < 520;
   const isLandscapePhone = width > height && width < 900;
+  const promptArea = getPromptAreaBounds(isLandscapePhone);
+  const promptAreaHeight = promptArea.bottom - promptArea.top;
 
   return {
     headingSize: constrain(shortSide * (isNarrow ? 0.094 : 0.08), 28, 64),
     promptSize: constrain(shortSide * (isNarrow ? 0.052 : 0.042), 18, 34),
-    headingTopY: height * (isLandscapePhone ? 0.15 : 0.16),
-    headingMiddleY: height * (isLandscapePhone ? 0.3 : 0.32),
-    headingBottomY: height * (isLandscapePhone ? 0.47 : 0.51),
-    promptTopY: height * (isLandscapePhone ? 0.22 : 0.24),
-    promptMiddleY: height * (isLandscapePhone ? 0.39 : 0.42),
-    promptBottomY: height * (isLandscapePhone ? 0.56 : 0.6),
+    headingTopY: promptArea.top + promptAreaHeight * 0.1,
+    headingMiddleY: promptArea.top + promptAreaHeight * 0.34,
+    headingBottomY: promptArea.top + promptAreaHeight * 0.58,
+    promptTopY: promptArea.top + promptAreaHeight * 0.2,
+    promptMiddleY: promptArea.top + promptAreaHeight * 0.46,
+    promptBottomY: promptArea.top + promptAreaHeight * 0.72,
+    promptBoxHeight: max(promptAreaHeight * 0.13, 42),
   };
+}
+
+function getPromptAreaBounds(isLandscapePhone) {
+  const topPadding = height * (isLandscapePhone ? 0.1 : 0.12);
+  const defaultBottom = height * (isLandscapePhone ? 0.62 : 0.68);
+
+  if (!writingPanel) {
+    return { top: topPadding, bottom: defaultBottom };
+  }
+
+  const panelTop = writingPanel.elt.offsetTop;
+  const reservedGap = height * (isLandscapePhone ? 0.08 : 0.07);
+  const bottom = constrain(panelTop - reservedGap, height * 0.42, defaultBottom);
+
+  return { top: topPadding, bottom };
 }
 
 function tuleva() {
