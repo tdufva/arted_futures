@@ -324,56 +324,61 @@ function drawConfettiScene() {
   const time = frameCount * 0.01;
   const unit = min(width, height);
   const phase = map(sin(time * 0.45), -1, 1, 0, 1);
-  const accentA = lerpPaletteColor(POSTER_PALETTE.brick, POSTER_PALETTE.mustard, phase);
-  const accentB = lerpPaletteColor(POSTER_PALETTE.teal, POSTER_PALETTE.rust, 1 - phase);
-  const paperTone = lerpPaletteColor(POSTER_PALETTE.paper, POSTER_PALETTE.cream, phase);
+  const drift = map(sin(time * 0.22), -1, 1, -1, 1);
+  const accentA = lerpPaletteColor(POSTER_PALETTE.brick, POSTER_PALETTE.teal, phase);
+  const accentB = lerpPaletteColor(POSTER_PALETTE.mustard, POSTER_PALETTE.coal, 1 - phase);
+  const accentC = lerpPaletteColor(POSTER_PALETTE.rust, POSTER_PALETTE.paper, map(cos(time * 0.31), -1, 1, 0, 1));
+  const paperTone = lerpPaletteColor(POSTER_PALETTE.paper, POSTER_PALETTE.teal, phase * 0.45);
 
   noStroke();
   fill(paperTone[0], paperTone[1], paperTone[2], 165);
   rect(width * 0.05, height * 0.07, width * 0.9, height * 0.82, 30);
 
   push();
-  translate(width * (0.26 + sin(time * 0.4) * 0.08), height * (0.3 + cos(time * 0.5) * 0.06));
-  rotate(time * 1.2);
+  translate(width * (0.22 + sin(time * 0.4) * 0.16), height * (0.24 + cos(time * 0.5) * 0.14));
+  rotate(time * 1.2 + drift * 0.5);
   fill(accentA[0], accentA[1], accentA[2], 232);
   rectMode(CENTER);
-  rect(0, 0, unit * (0.44 + phase * 0.22), unit * (0.44 + phase * 0.22));
+  rect(0, 0, unit * (0.32 + phase * 0.34), unit * (0.54 - phase * 0.18));
+  rotate(-time * 0.6);
+  fill(accentC[0], accentC[1], accentC[2], 215);
+  triangle(-unit * 0.16, unit * 0.18, 0, -unit * 0.22, unit * 0.16, unit * 0.18);
   fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 225);
   ellipse(0, 0, unit * (0.16 + phase * 0.18), unit * (0.16 + phase * 0.18));
   pop();
 
   push();
-  translate(width * (0.72 + cos(time * 0.38) * 0.07), height * (0.62 + sin(time * 0.52) * 0.07));
-  rotate(-time * 0.95);
+  translate(width * (0.76 + cos(time * 0.38) * 0.16), height * (0.66 + sin(time * 0.52) * 0.14));
+  rotate(-time * 0.95 + drift * 0.45);
   fill(accentB[0], accentB[1], accentB[2], 235);
   rectMode(CENTER);
-  rect(0, 0, unit * (0.36 + (1 - phase) * 0.24), unit * (0.36 + (1 - phase) * 0.24));
+  rect(0, 0, unit * (0.24 + (1 - phase) * 0.32), unit * (0.52 - (1 - phase) * 0.14));
   fill(paperTone[0], paperTone[1], paperTone[2], 248);
-  rect(0, 0, unit * 0.16, unit * (0.16 + phase * 0.16));
+  ellipse(0, 0, unit * (0.12 + phase * 0.18), unit * (0.24 - phase * 0.08));
   pop();
 
   stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 190);
   strokeWeight(max(unit * 0.016, 5));
-  line(width * 0.04, height * (0.86 - phase * 0.08), width * 0.96, height * (0.14 + phase * 0.08));
-  line(width * (0.16 + phase * 0.06), height * 0.06, width * (0.86 - phase * 0.06), height * 0.94);
+  line(width * 0.01, height * (0.9 - phase * 0.14), width * 0.99, height * (0.1 + phase * 0.14));
+  line(width * (0.08 + phase * 0.12), height * 0.02, width * (0.92 - phase * 0.12), height * 0.98);
 
   push();
-  translate(width * 0.5, height * 0.48);
-  rotate(-PI / 7 + sin(time * 0.7) * 0.22);
+  translate(width * (0.5 + sin(time * 0.27) * 0.18), height * (0.48 + cos(time * 0.33) * 0.12));
+  rotate(-PI / 7 + sin(time * 0.7) * 0.4);
   fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 224);
   rectMode(CENTER);
-  rect(0, 0, unit * (0.1 + phase * 0.08), unit * (0.82 + sin(time * 0.5) * 0.26));
+  rect(0, 0, unit * (0.08 + phase * 0.12), unit * (0.74 + sin(time * 0.5) * 0.4));
   fill(accentA[0], accentA[1], accentA[2], 230);
-  rect(0, -unit * 0.16, unit * (0.36 + phase * 0.22), unit * 0.1);
-  fill(accentB[0], accentB[1], accentB[2], 215);
-  rect(0, unit * 0.18, unit * (0.24 + (1 - phase) * 0.24), unit * 0.08);
+  rect(0, -unit * 0.16, unit * (0.3 + phase * 0.34), unit * 0.1);
+  fill(accentC[0], accentC[1], accentC[2], 218);
+  ellipse(0, unit * 0.2, unit * (0.14 + (1 - phase) * 0.28), unit * 0.14);
   pop();
 
   noStroke();
-  for (let i = 0; i < 8; i += 1) {
-    const bandX = width * (0.08 + i * 0.1);
-    const bandHeight = height * map(sin(time * 1.9 + i * 0.85), -1, 1, 0.12, 0.64);
-    const bandColor = i % 2 === 0 ? accentA : accentB;
+  for (let i = 0; i < 10; i += 1) {
+    const bandX = width * (0.02 + i * 0.096) + sin(time * 0.9 + i * 0.6) * width * 0.03;
+    const bandHeight = height * map(sin(time * 1.9 + i * 0.85), -1, 1, 0.1, 0.78);
+    const bandColor = i % 3 === 0 ? accentA : i % 3 === 1 ? accentB : accentC;
     fill(bandColor[0], bandColor[1], bandColor[2], 188);
     rect(bandX, height * 0.88 - bandHeight, width * 0.062, bandHeight);
   }
@@ -396,34 +401,36 @@ function drawNoiseRectScene() {
   rect(0, 0, width, height);
 
   for (let i = 0; i < 16; i += 1) {
-    const glowX = width * noise(90 + i, time * 0.18);
-    const glowY = height * noise(120 + i, time * 0.14);
+    const glowX = width * noise(90 + i, time * 0.18) + sin(time * 0.6 + i) * width * 0.08;
+    const glowY = height * noise(120 + i, time * 0.14) + cos(time * 0.5 + i * 0.7) * height * 0.08;
     const glowSize = unit * map(noise(150 + i, time * 0.24), 0, 1, 0.14, 0.42);
     const glowColor = i % 2 === 0 ? NIGHT_PALETTE.indigo : NIGHT_PALETTE.violet;
     fill(glowColor[0], glowColor[1], glowColor[2], 24);
     ellipse(glowX, glowY, glowSize, glowSize);
   }
 
+  const chaos = map(sin(time * 0.19), -1, 1, 0, 1);
   push();
-  translate(width * 0.5, height * 0.54);
+  translate(width * (0.5 + sin(time * 0.18) * 0.16), height * (0.54 + cos(time * 0.15) * 0.12));
+  rotate(sin(time * 0.21) * 0.3);
   for (let i = 0; i < layers; i += 1) {
     const t = i / layers;
     const radius = unit * (0.08 + t * 0.58);
     const spin = time * 2.4 + t * TWO_PI * 1.25;
-    const wave = sin(time * 1.6 + i * 0.42) * unit * 0.085;
+    const wave = sin(time * 1.6 + i * 0.42) * unit * (0.045 + chaos * 0.11);
     const lineColor = lerpPaletteColor(lineStart, lineEnd, t);
 
-    stroke(lineColor[0], lineColor[1], lineColor[2], 165 - t * 105);
-    strokeWeight(map(t, 0, 1, 4.4, 0.7));
+    stroke(lineColor[0], lineColor[1], lineColor[2], 165 - t * 105 + chaos * 40);
+    strokeWeight(map(t, 0, 1, 4.4 + chaos * 1.4, 0.7));
     noFill();
     beginShape();
     for (let a = 0; a <= TWO_PI + 0.2; a += PI / 90) {
       const sculptRadius =
         radius +
-        sin(a * (3 + phaseShift(t)) + spin) * wave +
-        cos(a * 2.2 - spin * 0.6) * unit * 0.015;
-      const x = cos(a + spin) * sculptRadius * (1 + t * 0.24);
-      const y = sin(a + spin * 0.82) * sculptRadius * (0.32 + t * 0.34);
+        sin(a * (3 + phaseShift(t) + chaos * 2.6) + spin) * wave +
+        cos(a * (2.2 + chaos * 3.4) - spin * 0.6) * unit * (0.015 + chaos * 0.04);
+      const x = cos(a + spin + chaos * sin(a * 5)) * sculptRadius * (1 + t * (0.24 + chaos * 0.3));
+      const y = sin(a + spin * 0.82 + chaos * cos(a * 4)) * sculptRadius * (0.32 + t * (0.34 + chaos * 0.24));
       curveVertex(x, y);
     }
     endShape();
@@ -446,11 +453,12 @@ function drawNoiseEllipseScene() {
   const time = frameCount * 0.01;
   const unit = min(width, height);
   const seedCount = 520;
-  const centerX = width * 0.5;
-  const centerY = height * 0.5;
+  const centerX = width * (0.5 + sin(time * 0.14) * 0.16);
+  const centerY = height * (0.5 + cos(time * 0.17) * 0.14);
   const goldenAngle = 137.5;
   const phase = map(sin(time * 0.22), -1, 1, 0, 1);
-  const shellTone = lerpPaletteColor(PASTEL_PALETTE.shell, PASTEL_PALETTE.sky, phase * 0.35);
+  const chaos = map(sin(time * 0.18), -1, 1, 0, 1);
+  const shellTone = lerpPaletteColor(PASTEL_PALETTE.shell, PASTEL_PALETTE.lavender, phase * 0.6);
 
   noStroke();
   fill(shellTone[0], shellTone[1], shellTone[2], 178);
@@ -463,10 +471,13 @@ function drawNoiseEllipseScene() {
   }
 
   for (let i = 0; i < seedCount; i += 1) {
-    const angle = radians(i * goldenAngle + frameCount * 0.36);
+    const angle =
+      radians(i * goldenAngle + frameCount * 0.36) +
+      sin(time * 0.9 + i * 0.02) * chaos * 0.9;
     const radius = unit * map(sqrt(i), 0, sqrt(seedCount), 0.01, 0.6);
-    const x = centerX + cos(angle) * radius;
-    const y = centerY + sin(angle) * radius;
+    const chaosRadius = radius * (1 + sin(i * 0.11 + time * 1.5) * chaos * 0.45);
+    const x = centerX + cos(angle) * chaosRadius + sin(time + i * 0.03) * chaos * unit * 0.05;
+    const y = centerY + sin(angle) * chaosRadius + cos(time * 1.2 + i * 0.025) * chaos * unit * 0.05;
     const blossom = [
       PASTEL_PALETTE.peach,
       PASTEL_PALETTE.lavender,
@@ -477,7 +488,11 @@ function drawNoiseEllipseScene() {
     ][i % 6];
     const shimmer = sin(time * 1.8 + i * 0.07);
     const bloomSize = map(shimmer, -1, 1, unit * 0.008, unit * 0.04);
-    const pulseColor = lerpPaletteColor(blossom, PASTEL_PALETTE.shell, map(shimmer, -1, 1, 0.05, 0.3));
+    const pulseColor = lerpPaletteColor(
+      blossom,
+      i % 2 === 0 ? PASTEL_PALETTE.shell : PASTEL_PALETTE.rose,
+      map(shimmer, -1, 1, 0.05, 0.55)
+    );
 
     fill(pulseColor[0], pulseColor[1], pulseColor[2], 190);
     ellipse(x, y, bloomSize, bloomSize);
@@ -487,8 +502,8 @@ function drawNoiseEllipseScene() {
   strokeWeight(max(unit * 0.004, 1.2));
   noFill();
   for (let i = 0; i < 7; i += 1) {
-    const ringSize = unit * (0.16 + i * 0.11 + sin(time * 0.5 + i) * 0.025);
-    ellipse(centerX, centerY, ringSize, ringSize);
+    const ringSize = unit * (0.16 + i * 0.11 + sin(time * 0.5 + i) * 0.025 + chaos * 0.05);
+    ellipse(centerX, centerY, ringSize * (1 + chaos * 0.12), ringSize * (1 - chaos * 0.18));
   }
 
   noStroke();
