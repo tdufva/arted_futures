@@ -11,7 +11,7 @@ const BUTTON_COLORS = {
   activeBackground: [255, 50, 250],
 };
 const CANVAS_MIN_HEIGHT = 320;
-const STORAGE_KEY = "utopiointi-writing-note";
+const STORAGE_KEY = "utopiointi-writing-note-v2";
 const WES_PALETTE = {
   cream: [245, 232, 202],
   blush: [226, 168, 169],
@@ -336,6 +336,16 @@ function drawConfettiScene() {
   line(width * 0.08, height * 0.82, width * 0.92, height * 0.18);
   line(width * 0.18, height * 0.1, width * 0.84, height * 0.9);
 
+  push();
+  translate(width * 0.5, height * 0.46);
+  rotate(-PI / 9 + sin(time * 0.7) * 0.08);
+  fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 224);
+  rectMode(CENTER);
+  rect(0, 0, unit * 0.1, unit * 0.88);
+  fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 230);
+  rect(0, -unit * 0.16, unit * 0.42, unit * 0.1);
+  pop();
+
   noStroke();
   for (let i = 0; i < 6; i += 1) {
     const bandX = width * (0.14 + i * 0.12);
@@ -345,6 +355,7 @@ function drawConfettiScene() {
   }
 
   rectMode(CORNER);
+  ellipseMode(CENTER);
 }
 
 function drawNoiseRectScene() {
@@ -367,6 +378,11 @@ function drawNoiseRectScene() {
     rect(width * (0.11 + i * 0.16) - slide * 0.22, height * 0.34, width * 0.05, height * 0.28);
   }
 
+  fill(POSTER_PALETTE.rust[0], POSTER_PALETTE.rust[1], POSTER_PALETTE.rust[2], 224);
+  rect(width * 0.14, height * 0.12, width * 0.24, height * 0.08);
+  fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 224);
+  rect(width * 0.42, height * 0.12, width * 0.12, height * 0.08);
+
   stroke(POSTER_PALETTE.steel[0], POSTER_PALETTE.steel[1], POSTER_PALETTE.steel[2], 170);
   strokeWeight(max(unit * 0.008, 3));
   for (let i = -2; i < 10; i += 1) {
@@ -374,11 +390,20 @@ function drawNoiseRectScene() {
     line(width * (i * 0.12) + shift, 0, width * (i * 0.12) + width * 0.24 + shift, height);
   }
 
+  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 190);
+  strokeWeight(max(unit * 0.02, 7));
+  line(width * 0.08, height * 0.86, width * 0.92, height * 0.86);
+
   noStroke();
   fill(POSTER_PALETTE.teal[0], POSTER_PALETTE.teal[1], POSTER_PALETTE.teal[2], 220);
   rect(width * 0.58, height * 0.08, width * 0.28, height * 0.16);
   fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 240);
   rect(width * 0.62, height * 0.12, width * 0.08, height * 0.08);
+
+  fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 220);
+  ellipse(width * 0.78, height * 0.68, unit * 0.24, unit * 0.24);
+  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 245);
+  ellipse(width * 0.78, height * 0.68, unit * 0.09, unit * 0.09);
 
   noiseArvo += 0.004;
 }
@@ -407,11 +432,28 @@ function drawNoiseEllipseScene() {
   fill(POSTER_PALETTE.teal[0], POSTER_PALETTE.teal[1], POSTER_PALETTE.teal[2], 216);
   ellipse(centerX + cos(time * 1.5) * unit * 0.18, centerY + sin(time * 1.2) * unit * 0.1, unit * 0.18, unit * 0.18);
 
+  fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 220);
+  ellipse(centerX, centerY, unit * 0.11, unit * 0.11);
+  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 240);
+  ellipse(centerX, centerY, unit * 0.038, unit * 0.038);
+
   stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 180);
   strokeWeight(max(unit * 0.01, 4));
   line(width * 0.1, height * 0.22, width * 0.9, height * 0.22);
   line(width * 0.18, height * 0.78, width * 0.82, height * 0.78);
   line(centerX, height * 0.12, centerX, height * 0.88);
+
+  stroke(POSTER_PALETTE.rust[0], POSTER_PALETTE.rust[1], POSTER_PALETTE.rust[2], 205);
+  strokeWeight(max(unit * 0.012, 5));
+  for (let i = 0; i < 8; i += 1) {
+    const angle = -HALF_PI + (TWO_PI / 8) * i + time * 0.35;
+    line(
+      centerX + cos(angle) * unit * 0.34,
+      centerY + sin(angle) * unit * 0.34,
+      centerX + cos(angle) * unit * 0.48,
+      centerY + sin(angle) * unit * 0.48
+    );
+  }
 
   noiseArvo += 0.002;
 }
