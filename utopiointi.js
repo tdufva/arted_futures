@@ -34,6 +34,23 @@ const POSTER_PALETTE = {
   steel: [123, 137, 143],
   cream: [248, 242, 224],
 };
+const NIGHT_PALETTE = {
+  black: [8, 10, 18],
+  navy: [18, 24, 46],
+  indigo: [52, 46, 92],
+  violet: [111, 88, 164],
+  cyan: [105, 198, 214],
+  glow: [228, 241, 255],
+};
+const PASTEL_PALETTE = {
+  shell: [248, 240, 235],
+  peach: [245, 207, 192],
+  lavender: [214, 201, 244],
+  mint: [198, 233, 224],
+  sky: [196, 226, 243],
+  rose: [239, 190, 214],
+  gold: [232, 211, 156],
+};
 const LANGUAGE_CONTENT = {
   1: {
     titleTop: "KOSKA ?",
@@ -359,103 +376,108 @@ function drawConfettiScene() {
 }
 
 function drawNoiseRectScene() {
-  const time = frameCount * 0.01;
+  const time = frameCount * 0.018;
   const unit = min(width, height);
+  const layers = 42;
 
   noStroke();
-  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 120);
-  rect(width * 0.06, height * 0.08, width * 0.88, height * 0.84, 20);
+  fill(NIGHT_PALETTE.black[0], NIGHT_PALETTE.black[1], NIGHT_PALETTE.black[2], 232);
+  rect(0, 0, width, height);
 
-  fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 220);
-  rect(0, height * 0.18, width, height * 0.1);
-  rect(0, height * 0.72, width, height * 0.08);
-
-  for (let i = 0; i < 5; i += 1) {
-    const slide = noise(noiseArvo + i * 0.2, time * 0.3) * width * 0.16;
-    fill(POSTER_PALETTE.brick[0], POSTER_PALETTE.brick[1], POSTER_PALETTE.brick[2], 215);
-    rect(width * (0.08 + i * 0.16) + slide, height * 0.26, width * 0.12, height * 0.48);
-    fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 205);
-    rect(width * (0.11 + i * 0.16) - slide * 0.22, height * 0.34, width * 0.05, height * 0.28);
+  for (let i = 0; i < 10; i += 1) {
+    const glowX = width * noise(90 + i, time * 0.12);
+    const glowY = height * noise(120 + i, time * 0.1);
+    const glowSize = unit * map(noise(150 + i, time * 0.18), 0, 1, 0.12, 0.3);
+    fill(NIGHT_PALETTE.indigo[0], NIGHT_PALETTE.indigo[1], NIGHT_PALETTE.indigo[2], 20);
+    ellipse(glowX, glowY, glowSize, glowSize);
   }
 
-  fill(POSTER_PALETTE.rust[0], POSTER_PALETTE.rust[1], POSTER_PALETTE.rust[2], 224);
-  rect(width * 0.14, height * 0.12, width * 0.24, height * 0.08);
-  fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 224);
-  rect(width * 0.42, height * 0.12, width * 0.12, height * 0.08);
+  push();
+  translate(width * 0.5, height * 0.54);
+  for (let i = 0; i < layers; i += 1) {
+    const t = i / layers;
+    const radius = unit * (0.1 + t * 0.42);
+    const spin = time * 1.7 + t * TWO_PI * 0.9;
+    const wave = sin(time * 1.3 + i * 0.35) * unit * 0.045;
+    const lineColor = lerpPaletteColor(NIGHT_PALETTE.cyan, NIGHT_PALETTE.violet, t);
 
-  stroke(POSTER_PALETTE.steel[0], POSTER_PALETTE.steel[1], POSTER_PALETTE.steel[2], 170);
-  strokeWeight(max(unit * 0.008, 3));
-  for (let i = -2; i < 10; i += 1) {
-    const shift = sin(time * 1.6 + i * 0.4) * width * 0.04;
-    line(width * (i * 0.12) + shift, 0, width * (i * 0.12) + width * 0.24 + shift, height);
+    stroke(lineColor[0], lineColor[1], lineColor[2], 165 - t * 105);
+    strokeWeight(map(t, 0, 1, 3.6, 0.8));
+    noFill();
+    beginShape();
+    for (let a = 0; a <= TWO_PI + 0.2; a += PI / 70) {
+      const sculptRadius = radius + sin(a * 3 + spin) * wave;
+      const x = cos(a + spin) * sculptRadius * (1 + t * 0.16);
+      const y = sin(a + spin * 0.85) * sculptRadius * (0.42 + t * 0.18);
+      curveVertex(x, y);
+    }
+    endShape();
   }
+  pop();
 
-  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 190);
-  strokeWeight(max(unit * 0.02, 7));
-  line(width * 0.08, height * 0.86, width * 0.92, height * 0.86);
+  stroke(NIGHT_PALETTE.glow[0], NIGHT_PALETTE.glow[1], NIGHT_PALETTE.glow[2], 85);
+  strokeWeight(max(unit * 0.004, 1.5));
+  line(width * 0.18, height * 0.24, width * 0.82, height * 0.24);
+  line(width * 0.22, height * 0.82, width * 0.78, height * 0.82);
 
   noStroke();
-  fill(POSTER_PALETTE.teal[0], POSTER_PALETTE.teal[1], POSTER_PALETTE.teal[2], 220);
-  rect(width * 0.58, height * 0.08, width * 0.28, height * 0.16);
-  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 240);
-  rect(width * 0.62, height * 0.12, width * 0.08, height * 0.08);
+  fill(NIGHT_PALETTE.glow[0], NIGHT_PALETTE.glow[1], NIGHT_PALETTE.glow[2], 210);
+  ellipse(width * 0.5, height * 0.54, unit * 0.035, unit * 0.035);
 
-  fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 220);
-  ellipse(width * 0.78, height * 0.68, unit * 0.24, unit * 0.24);
-  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 245);
-  ellipse(width * 0.78, height * 0.68, unit * 0.09, unit * 0.09);
-
-  noiseArvo += 0.004;
+  noiseArvo += 0.002;
 }
 
 function drawNoiseEllipseScene() {
-  const time = frameCount * 0.009;
+  const time = frameCount * 0.012;
   const unit = min(width, height);
-  const centerX = width * (0.52 + sin(time * 0.4) * 0.03);
+  const seedCount = 320;
+  const centerX = width * 0.5;
   const centerY = height * 0.5;
+  const goldenAngle = 137.5;
 
   noStroke();
-  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 128);
-  ellipse(centerX, centerY, unit * 0.95, unit * 0.95);
+  fill(PASTEL_PALETTE.shell[0], PASTEL_PALETTE.shell[1], PASTEL_PALETTE.shell[2], 170);
+  rect(width * 0.05, height * 0.07, width * 0.9, height * 0.86, 30);
 
-  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 215);
-  strokeWeight(max(unit * 0.016, 6));
-  noFill();
-  ellipse(centerX, centerY, unit * 0.82, unit * 0.82);
-  ellipse(centerX, centerY, unit * 0.54, unit * 0.54);
-
-  noStroke();
-  fill(POSTER_PALETTE.brick[0], POSTER_PALETTE.brick[1], POSTER_PALETTE.brick[2], 232);
-  arc(centerX, centerY, unit * 0.94, unit * 0.94, -HALF_PI + time, 0.15 + time, PIE);
-  fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 225);
-  arc(centerX, centerY, unit * 0.6, unit * 0.6, HALF_PI + time * 0.7, PI + time * 0.7, PIE);
-  fill(POSTER_PALETTE.teal[0], POSTER_PALETTE.teal[1], POSTER_PALETTE.teal[2], 216);
-  ellipse(centerX + cos(time * 1.5) * unit * 0.18, centerY + sin(time * 1.2) * unit * 0.1, unit * 0.18, unit * 0.18);
-
-  fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 220);
-  ellipse(centerX, centerY, unit * 0.11, unit * 0.11);
-  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 240);
-  ellipse(centerX, centerY, unit * 0.038, unit * 0.038);
-
-  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 180);
-  strokeWeight(max(unit * 0.01, 4));
-  line(width * 0.1, height * 0.22, width * 0.9, height * 0.22);
-  line(width * 0.18, height * 0.78, width * 0.82, height * 0.78);
-  line(centerX, height * 0.12, centerX, height * 0.88);
-
-  stroke(POSTER_PALETTE.rust[0], POSTER_PALETTE.rust[1], POSTER_PALETTE.rust[2], 205);
-  strokeWeight(max(unit * 0.012, 5));
-  for (let i = 0; i < 8; i += 1) {
-    const angle = -HALF_PI + (TWO_PI / 8) * i + time * 0.35;
-    line(
-      centerX + cos(angle) * unit * 0.34,
-      centerY + sin(angle) * unit * 0.34,
-      centerX + cos(angle) * unit * 0.48,
-      centerY + sin(angle) * unit * 0.48
-    );
+  for (let i = 0; i < 6; i += 1) {
+    const haloColor = [PASTEL_PALETTE.sky, PASTEL_PALETTE.lavender, PASTEL_PALETTE.mint][i % 3];
+    fill(haloColor[0], haloColor[1], haloColor[2], 18);
+    ellipse(centerX, centerY, unit * (1.05 - i * 0.12), unit * (1.05 - i * 0.12));
   }
 
-  noiseArvo += 0.002;
+  for (let i = 0; i < seedCount; i += 1) {
+    const angle = radians(i * goldenAngle + frameCount * 0.28);
+    const radius = unit * 0.028 * sqrt(i);
+    const x = centerX + cos(angle) * radius;
+    const y = centerY + sin(angle) * radius;
+    const blossom = [
+      PASTEL_PALETTE.peach,
+      PASTEL_PALETTE.lavender,
+      PASTEL_PALETTE.mint,
+      PASTEL_PALETTE.sky,
+      PASTEL_PALETTE.rose,
+      PASTEL_PALETTE.gold,
+    ][i % 6];
+    const bloomSize = map(sin(time + i * 0.04), -1, 1, unit * 0.012, unit * 0.03);
+
+    fill(blossom[0], blossom[1], blossom[2], 185);
+    ellipse(x, y, bloomSize, bloomSize);
+  }
+
+  stroke(PASTEL_PALETTE.lavender[0], PASTEL_PALETTE.lavender[1], PASTEL_PALETTE.lavender[2], 90);
+  strokeWeight(max(unit * 0.003, 1));
+  noFill();
+  for (let i = 0; i < 5; i += 1) {
+    ellipse(centerX, centerY, unit * (0.2 + i * 0.12), unit * (0.2 + i * 0.12));
+  }
+
+  noStroke();
+  fill(PASTEL_PALETTE.shell[0], PASTEL_PALETTE.shell[1], PASTEL_PALETTE.shell[2], 245);
+  ellipse(centerX, centerY, unit * 0.16, unit * 0.16);
+  fill(PASTEL_PALETTE.gold[0], PASTEL_PALETTE.gold[1], PASTEL_PALETTE.gold[2], 215);
+  ellipse(centerX, centerY, unit * 0.055, unit * 0.055);
+
+  noiseArvo += 0.0015;
 }
 
 function getPaletteCycle(value) {
