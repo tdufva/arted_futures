@@ -321,54 +321,61 @@ function drawBackdropWash() {
 }
 
 function drawConfettiScene() {
-  const time = frameCount * 0.012;
+  const time = frameCount * 0.01;
   const unit = min(width, height);
+  const phase = map(sin(time * 0.45), -1, 1, 0, 1);
+  const accentA = lerpPaletteColor(POSTER_PALETTE.brick, POSTER_PALETTE.mustard, phase);
+  const accentB = lerpPaletteColor(POSTER_PALETTE.teal, POSTER_PALETTE.rust, 1 - phase);
+  const paperTone = lerpPaletteColor(POSTER_PALETTE.paper, POSTER_PALETTE.cream, phase);
 
   noStroke();
-  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 150);
-  rect(width * 0.08, height * 0.1, width * 0.84, height * 0.78, 28);
+  fill(paperTone[0], paperTone[1], paperTone[2], 165);
+  rect(width * 0.05, height * 0.07, width * 0.9, height * 0.82, 30);
 
   push();
-  translate(width * 0.29, height * 0.34);
-  rotate(time * 0.9);
-  fill(POSTER_PALETTE.brick[0], POSTER_PALETTE.brick[1], POSTER_PALETTE.brick[2], 228);
+  translate(width * (0.26 + sin(time * 0.4) * 0.08), height * (0.3 + cos(time * 0.5) * 0.06));
+  rotate(time * 1.2);
+  fill(accentA[0], accentA[1], accentA[2], 232);
   rectMode(CENTER);
-  rect(0, 0, unit * 0.5, unit * 0.5);
-  fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 220);
-  ellipse(0, 0, unit * 0.22, unit * 0.22);
+  rect(0, 0, unit * (0.44 + phase * 0.22), unit * (0.44 + phase * 0.22));
+  fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 225);
+  ellipse(0, 0, unit * (0.16 + phase * 0.18), unit * (0.16 + phase * 0.18));
   pop();
 
   push();
-  translate(width * 0.72, height * 0.63);
-  rotate(-time * 0.75);
-  fill(POSTER_PALETTE.teal[0], POSTER_PALETTE.teal[1], POSTER_PALETTE.teal[2], 230);
+  translate(width * (0.72 + cos(time * 0.38) * 0.07), height * (0.62 + sin(time * 0.52) * 0.07));
+  rotate(-time * 0.95);
+  fill(accentB[0], accentB[1], accentB[2], 235);
   rectMode(CENTER);
-  rect(0, 0, unit * 0.42, unit * 0.42);
-  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 245);
-  rect(0, 0, unit * 0.16, unit * 0.16);
+  rect(0, 0, unit * (0.36 + (1 - phase) * 0.24), unit * (0.36 + (1 - phase) * 0.24));
+  fill(paperTone[0], paperTone[1], paperTone[2], 248);
+  rect(0, 0, unit * 0.16, unit * (0.16 + phase * 0.16));
   pop();
 
-  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 180);
-  strokeWeight(max(unit * 0.012, 4));
-  line(width * 0.08, height * 0.82, width * 0.92, height * 0.18);
-  line(width * 0.18, height * 0.1, width * 0.84, height * 0.9);
+  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 190);
+  strokeWeight(max(unit * 0.016, 5));
+  line(width * 0.04, height * (0.86 - phase * 0.08), width * 0.96, height * (0.14 + phase * 0.08));
+  line(width * (0.16 + phase * 0.06), height * 0.06, width * (0.86 - phase * 0.06), height * 0.94);
 
   push();
-  translate(width * 0.5, height * 0.46);
-  rotate(-PI / 9 + sin(time * 0.7) * 0.08);
+  translate(width * 0.5, height * 0.48);
+  rotate(-PI / 7 + sin(time * 0.7) * 0.22);
   fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 224);
   rectMode(CENTER);
-  rect(0, 0, unit * 0.1, unit * 0.88);
-  fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 230);
-  rect(0, -unit * 0.16, unit * 0.42, unit * 0.1);
+  rect(0, 0, unit * (0.1 + phase * 0.08), unit * (0.82 + sin(time * 0.5) * 0.26));
+  fill(accentA[0], accentA[1], accentA[2], 230);
+  rect(0, -unit * 0.16, unit * (0.36 + phase * 0.22), unit * 0.1);
+  fill(accentB[0], accentB[1], accentB[2], 215);
+  rect(0, unit * 0.18, unit * (0.24 + (1 - phase) * 0.24), unit * 0.08);
   pop();
 
   noStroke();
-  for (let i = 0; i < 6; i += 1) {
-    const bandX = width * (0.14 + i * 0.12);
-    const bandHeight = height * map(sin(time * 2 + i * 0.7), -1, 1, 0.18, 0.5);
-    fill(POSTER_PALETTE.rust[0], POSTER_PALETTE.rust[1], POSTER_PALETTE.rust[2], 185);
-    rect(bandX, height * 0.78 - bandHeight, width * 0.055, bandHeight);
+  for (let i = 0; i < 8; i += 1) {
+    const bandX = width * (0.08 + i * 0.1);
+    const bandHeight = height * map(sin(time * 1.9 + i * 0.85), -1, 1, 0.12, 0.64);
+    const bandColor = i % 2 === 0 ? accentA : accentB;
+    fill(bandColor[0], bandColor[1], bandColor[2], 188);
+    rect(bandX, height * 0.88 - bandHeight, width * 0.062, bandHeight);
   }
 
   rectMode(CORNER);
@@ -376,19 +383,24 @@ function drawConfettiScene() {
 }
 
 function drawNoiseRectScene() {
-  const time = frameCount * 0.018;
+  const time = frameCount * 0.014;
   const unit = min(width, height);
-  const layers = 42;
+  const layers = 58;
+  const colorPhase = map(sin(time * 0.28), -1, 1, 0, 1);
+  const bgColor = lerpPaletteColor(NIGHT_PALETTE.black, NIGHT_PALETTE.navy, colorPhase);
+  const lineStart = lerpPaletteColor(NIGHT_PALETTE.cyan, NIGHT_PALETTE.glow, colorPhase);
+  const lineEnd = lerpPaletteColor(NIGHT_PALETTE.violet, NIGHT_PALETTE.indigo, 1 - colorPhase);
 
   noStroke();
-  fill(NIGHT_PALETTE.black[0], NIGHT_PALETTE.black[1], NIGHT_PALETTE.black[2], 232);
+  fill(bgColor[0], bgColor[1], bgColor[2], 236);
   rect(0, 0, width, height);
 
-  for (let i = 0; i < 10; i += 1) {
-    const glowX = width * noise(90 + i, time * 0.12);
-    const glowY = height * noise(120 + i, time * 0.1);
-    const glowSize = unit * map(noise(150 + i, time * 0.18), 0, 1, 0.12, 0.3);
-    fill(NIGHT_PALETTE.indigo[0], NIGHT_PALETTE.indigo[1], NIGHT_PALETTE.indigo[2], 20);
+  for (let i = 0; i < 16; i += 1) {
+    const glowX = width * noise(90 + i, time * 0.18);
+    const glowY = height * noise(120 + i, time * 0.14);
+    const glowSize = unit * map(noise(150 + i, time * 0.24), 0, 1, 0.14, 0.42);
+    const glowColor = i % 2 === 0 ? NIGHT_PALETTE.indigo : NIGHT_PALETTE.violet;
+    fill(glowColor[0], glowColor[1], glowColor[2], 24);
     ellipse(glowX, glowY, glowSize, glowSize);
   }
 
@@ -396,58 +408,63 @@ function drawNoiseRectScene() {
   translate(width * 0.5, height * 0.54);
   for (let i = 0; i < layers; i += 1) {
     const t = i / layers;
-    const radius = unit * (0.1 + t * 0.42);
-    const spin = time * 1.7 + t * TWO_PI * 0.9;
-    const wave = sin(time * 1.3 + i * 0.35) * unit * 0.045;
-    const lineColor = lerpPaletteColor(NIGHT_PALETTE.cyan, NIGHT_PALETTE.violet, t);
+    const radius = unit * (0.08 + t * 0.58);
+    const spin = time * 2.4 + t * TWO_PI * 1.25;
+    const wave = sin(time * 1.6 + i * 0.42) * unit * 0.085;
+    const lineColor = lerpPaletteColor(lineStart, lineEnd, t);
 
     stroke(lineColor[0], lineColor[1], lineColor[2], 165 - t * 105);
-    strokeWeight(map(t, 0, 1, 3.6, 0.8));
+    strokeWeight(map(t, 0, 1, 4.4, 0.7));
     noFill();
     beginShape();
-    for (let a = 0; a <= TWO_PI + 0.2; a += PI / 70) {
-      const sculptRadius = radius + sin(a * 3 + spin) * wave;
-      const x = cos(a + spin) * sculptRadius * (1 + t * 0.16);
-      const y = sin(a + spin * 0.85) * sculptRadius * (0.42 + t * 0.18);
+    for (let a = 0; a <= TWO_PI + 0.2; a += PI / 90) {
+      const sculptRadius =
+        radius +
+        sin(a * (3 + phaseShift(t)) + spin) * wave +
+        cos(a * 2.2 - spin * 0.6) * unit * 0.015;
+      const x = cos(a + spin) * sculptRadius * (1 + t * 0.24);
+      const y = sin(a + spin * 0.82) * sculptRadius * (0.32 + t * 0.34);
       curveVertex(x, y);
     }
     endShape();
   }
   pop();
 
-  stroke(NIGHT_PALETTE.glow[0], NIGHT_PALETTE.glow[1], NIGHT_PALETTE.glow[2], 85);
-  strokeWeight(max(unit * 0.004, 1.5));
-  line(width * 0.18, height * 0.24, width * 0.82, height * 0.24);
-  line(width * 0.22, height * 0.82, width * 0.78, height * 0.82);
+  stroke(NIGHT_PALETTE.glow[0], NIGHT_PALETTE.glow[1], NIGHT_PALETTE.glow[2], 90);
+  strokeWeight(max(unit * 0.005, 1.5));
+  line(width * 0.12, height * 0.18, width * 0.88, height * 0.18);
+  line(width * 0.16, height * 0.86, width * 0.84, height * 0.86);
 
   noStroke();
   fill(NIGHT_PALETTE.glow[0], NIGHT_PALETTE.glow[1], NIGHT_PALETTE.glow[2], 210);
-  ellipse(width * 0.5, height * 0.54, unit * 0.035, unit * 0.035);
+  ellipse(width * 0.5, height * 0.54, unit * 0.04, unit * 0.04);
 
   noiseArvo += 0.002;
 }
 
 function drawNoiseEllipseScene() {
-  const time = frameCount * 0.012;
+  const time = frameCount * 0.01;
   const unit = min(width, height);
-  const seedCount = 320;
+  const seedCount = 520;
   const centerX = width * 0.5;
   const centerY = height * 0.5;
   const goldenAngle = 137.5;
+  const phase = map(sin(time * 0.22), -1, 1, 0, 1);
+  const shellTone = lerpPaletteColor(PASTEL_PALETTE.shell, PASTEL_PALETTE.sky, phase * 0.35);
 
   noStroke();
-  fill(PASTEL_PALETTE.shell[0], PASTEL_PALETTE.shell[1], PASTEL_PALETTE.shell[2], 170);
-  rect(width * 0.05, height * 0.07, width * 0.9, height * 0.86, 30);
+  fill(shellTone[0], shellTone[1], shellTone[2], 178);
+  rect(width * 0.03, height * 0.05, width * 0.94, height * 0.9, 34);
 
-  for (let i = 0; i < 6; i += 1) {
-    const haloColor = [PASTEL_PALETTE.sky, PASTEL_PALETTE.lavender, PASTEL_PALETTE.mint][i % 3];
-    fill(haloColor[0], haloColor[1], haloColor[2], 18);
-    ellipse(centerX, centerY, unit * (1.05 - i * 0.12), unit * (1.05 - i * 0.12));
+  for (let i = 0; i < 8; i += 1) {
+    const haloColor = [PASTEL_PALETTE.sky, PASTEL_PALETTE.lavender, PASTEL_PALETTE.mint, PASTEL_PALETTE.rose][i % 4];
+    fill(haloColor[0], haloColor[1], haloColor[2], 18 + i * 2);
+    ellipse(centerX, centerY, unit * (1.18 - i * 0.1), unit * (1.18 - i * 0.1));
   }
 
   for (let i = 0; i < seedCount; i += 1) {
-    const angle = radians(i * goldenAngle + frameCount * 0.28);
-    const radius = unit * 0.028 * sqrt(i);
+    const angle = radians(i * goldenAngle + frameCount * 0.36);
+    const radius = unit * map(sqrt(i), 0, sqrt(seedCount), 0.01, 0.6);
     const x = centerX + cos(angle) * radius;
     const y = centerY + sin(angle) * radius;
     const blossom = [
@@ -458,26 +475,33 @@ function drawNoiseEllipseScene() {
       PASTEL_PALETTE.rose,
       PASTEL_PALETTE.gold,
     ][i % 6];
-    const bloomSize = map(sin(time + i * 0.04), -1, 1, unit * 0.012, unit * 0.03);
+    const shimmer = sin(time * 1.8 + i * 0.07);
+    const bloomSize = map(shimmer, -1, 1, unit * 0.008, unit * 0.04);
+    const pulseColor = lerpPaletteColor(blossom, PASTEL_PALETTE.shell, map(shimmer, -1, 1, 0.05, 0.3));
 
-    fill(blossom[0], blossom[1], blossom[2], 185);
+    fill(pulseColor[0], pulseColor[1], pulseColor[2], 190);
     ellipse(x, y, bloomSize, bloomSize);
   }
 
-  stroke(PASTEL_PALETTE.lavender[0], PASTEL_PALETTE.lavender[1], PASTEL_PALETTE.lavender[2], 90);
-  strokeWeight(max(unit * 0.003, 1));
+  stroke(PASTEL_PALETTE.lavender[0], PASTEL_PALETTE.lavender[1], PASTEL_PALETTE.lavender[2], 95);
+  strokeWeight(max(unit * 0.004, 1.2));
   noFill();
-  for (let i = 0; i < 5; i += 1) {
-    ellipse(centerX, centerY, unit * (0.2 + i * 0.12), unit * (0.2 + i * 0.12));
+  for (let i = 0; i < 7; i += 1) {
+    const ringSize = unit * (0.16 + i * 0.11 + sin(time * 0.5 + i) * 0.025);
+    ellipse(centerX, centerY, ringSize, ringSize);
   }
 
   noStroke();
   fill(PASTEL_PALETTE.shell[0], PASTEL_PALETTE.shell[1], PASTEL_PALETTE.shell[2], 245);
-  ellipse(centerX, centerY, unit * 0.16, unit * 0.16);
-  fill(PASTEL_PALETTE.gold[0], PASTEL_PALETTE.gold[1], PASTEL_PALETTE.gold[2], 215);
-  ellipse(centerX, centerY, unit * 0.055, unit * 0.055);
+  ellipse(centerX, centerY, unit * 0.18, unit * 0.18);
+  fill(PASTEL_PALETTE.gold[0], PASTEL_PALETTE.gold[1], PASTEL_PALETTE.gold[2], 220);
+  ellipse(centerX, centerY, unit * (0.05 + phase * 0.03), unit * (0.05 + phase * 0.03));
 
   noiseArvo += 0.0015;
+}
+
+function phaseShift(value) {
+  return 1 + sin(frameCount * 0.01 + value * TWO_PI) * 0.8;
 }
 
 function getPaletteCycle(value) {
