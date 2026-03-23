@@ -480,8 +480,8 @@ function drawLanguagePrompt() {
 
 function drawPromptResults() {
   const metrics = getTextMetrics();
-  const textBoxX = width * 0.09;
-  const textBoxWidth = width * 0.82;
+  const textBoxX = width * 0.12;
+  const textBoxWidth = width * 0.76;
   const textBoxHeight = metrics.promptBoxHeight;
 
   drawLanguagePrompt();
@@ -489,7 +489,7 @@ function drawPromptResults() {
   fill(BODY_TEXT_COLOR);
   noStroke();
   textFont(fontRegular);
-  textAlign(CENTER, CENTER);
+  textAlign(CENTER, TOP);
   textSize(metrics.promptSize);
   text(currentPrompt.when, textBoxX, metrics.resultTopY, textBoxWidth, textBoxHeight);
   text(currentPrompt.kind, textBoxX, metrics.resultMiddleY, textBoxWidth, textBoxHeight);
@@ -500,33 +500,28 @@ function getTextMetrics() {
   const shortSide = min(width, height);
   const isNarrow = width < 520;
   const isLandscapePhone = width > height && width < 900;
-  const promptArea = getPromptAreaBounds(isLandscapePhone);
-  const promptAreaHeight = promptArea.bottom - promptArea.top;
   const headingSize = constrain(shortSide * (isNarrow ? 0.094 : 0.08), 28, 64);
   const promptSize = constrain(shortSide * (isNarrow ? 0.052 : 0.042), 18, 34);
-  const headingToResultGap = constrain(shortSide * (isLandscapePhone ? 0.06 : 0.072), 28, 56);
-  const groupOneY = promptArea.top + promptAreaHeight * 0.14;
-  const groupTwoY = promptArea.top + promptAreaHeight * 0.44;
-  const groupThreeY = promptArea.top + promptAreaHeight * 0.74;
+  const topInset = height * (isLandscapePhone ? 0.08 : 0.1);
+  const availableHeight = height * (isLandscapePhone ? 0.72 : 0.76);
+  const headingTopY = topInset + availableHeight * 0.12;
+  const headingMiddleY = topInset + availableHeight * 0.42;
+  const headingBottomY = topInset + availableHeight * 0.74;
+  const resultTopY = headingTopY + constrain(headingSize * 0.85, 28, 54);
+  const resultMiddleY = headingMiddleY + constrain(headingSize * 0.95, 34, 62);
+  const resultBottomY = headingBottomY + constrain(headingSize * 0.8, 28, 52);
 
   return {
     headingSize,
     promptSize,
-    headingTopY: groupOneY,
-    headingMiddleY: groupTwoY,
-    headingBottomY: groupThreeY,
-    resultTopY: groupOneY + headingToResultGap,
-    resultMiddleY: groupTwoY + headingToResultGap,
-    resultBottomY: min(groupThreeY + headingToResultGap, promptArea.bottom - promptSize * 0.35),
-    promptBoxHeight: max(promptAreaHeight * 0.1, 38),
+    headingTopY,
+    headingMiddleY,
+    headingBottomY,
+    resultTopY,
+    resultMiddleY,
+    resultBottomY,
+    promptBoxHeight: max(headingSize * 1.9, 52),
   };
-}
-
-function getPromptAreaBounds(isLandscapePhone) {
-  const topPadding = height * (isLandscapePhone ? 0.1 : 0.12);
-  const bottom = height * (isLandscapePhone ? 0.78 : 0.8);
-
-  return { top: topPadding, bottom };
 }
 
 function tuleva() {
