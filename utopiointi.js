@@ -489,9 +489,9 @@ function drawPromptResults() {
   textFont(fontRegular);
   textAlign(CENTER, CENTER);
   textSize(metrics.promptSize);
-  text(currentPrompt.when, textBoxX, metrics.promptTopY, textBoxWidth, textBoxHeight);
-  text(currentPrompt.kind, textBoxX, metrics.promptMiddleY, textBoxWidth, textBoxHeight);
-  text(currentPrompt.what, textBoxX, metrics.promptBottomY, textBoxWidth, textBoxHeight);
+  text(currentPrompt.when, textBoxX, metrics.resultTopY, textBoxWidth, textBoxHeight);
+  text(currentPrompt.kind, textBoxX, metrics.resultMiddleY, textBoxWidth, textBoxHeight);
+  text(currentPrompt.what, textBoxX, metrics.resultBottomY, textBoxWidth, textBoxHeight);
 }
 
 function getTextMetrics() {
@@ -500,31 +500,37 @@ function getTextMetrics() {
   const isLandscapePhone = width > height && width < 900;
   const promptArea = getPromptAreaBounds(isLandscapePhone);
   const promptAreaHeight = promptArea.bottom - promptArea.top;
+  const headingSize = constrain(shortSide * (isNarrow ? 0.094 : 0.08), 28, 64);
+  const promptSize = constrain(shortSide * (isNarrow ? 0.052 : 0.042), 18, 34);
+  const headingToResultGap = constrain(shortSide * (isLandscapePhone ? 0.06 : 0.072), 28, 56);
+  const groupOneY = promptArea.top + promptAreaHeight * 0.14;
+  const groupTwoY = promptArea.top + promptAreaHeight * 0.44;
+  const groupThreeY = promptArea.top + promptAreaHeight * 0.74;
 
   return {
-    headingSize: constrain(shortSide * (isNarrow ? 0.094 : 0.08), 28, 64),
-    promptSize: constrain(shortSide * (isNarrow ? 0.052 : 0.042), 18, 34),
-    headingTopY: promptArea.top + promptAreaHeight * 0.1,
-    headingMiddleY: promptArea.top + promptAreaHeight * 0.34,
-    headingBottomY: promptArea.top + promptAreaHeight * 0.58,
-    promptTopY: promptArea.top + promptAreaHeight * 0.2,
-    promptMiddleY: promptArea.top + promptAreaHeight * 0.46,
-    promptBottomY: promptArea.top + promptAreaHeight * 0.72,
-    promptBoxHeight: max(promptAreaHeight * 0.13, 42),
+    headingSize,
+    promptSize,
+    headingTopY: groupOneY,
+    headingMiddleY: groupTwoY,
+    headingBottomY: groupThreeY,
+    resultTopY: groupOneY + headingToResultGap,
+    resultMiddleY: groupTwoY + headingToResultGap,
+    resultBottomY: min(groupThreeY + headingToResultGap, promptArea.bottom - promptSize * 0.35),
+    promptBoxHeight: max(promptAreaHeight * 0.1, 38),
   };
 }
 
 function getPromptAreaBounds(isLandscapePhone) {
   const topPadding = height * (isLandscapePhone ? 0.1 : 0.12);
-  const defaultBottom = height * (isLandscapePhone ? 0.62 : 0.68);
+  const defaultBottom = height * (isLandscapePhone ? 0.64 : 0.72);
 
   if (!writingPanel) {
     return { top: topPadding, bottom: defaultBottom };
   }
 
   const panelTop = writingPanel.elt.offsetTop;
-  const reservedGap = height * (isLandscapePhone ? 0.08 : 0.07);
-  const bottom = constrain(panelTop - reservedGap, height * 0.42, defaultBottom);
+  const reservedGap = height * (isLandscapePhone ? 0.11 : 0.09);
+  const bottom = constrain(panelTop - reservedGap, height * 0.5, defaultBottom);
 
   return { top: topPadding, bottom };
 }
