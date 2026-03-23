@@ -24,6 +24,16 @@ const WES_PALETTE = {
   sky: [184, 209, 213],
   ink: [66, 56, 51],
 };
+const POSTER_PALETTE = {
+  paper: [242, 232, 205],
+  coal: [35, 33, 31],
+  brick: [168, 48, 38],
+  rust: [186, 91, 42],
+  mustard: [214, 162, 45],
+  teal: [41, 108, 118],
+  steel: [123, 137, 143],
+  cream: [248, 242, 224],
+};
 const LANGUAGE_CONTENT = {
   1: {
     titleTop: "KOSKA ?",
@@ -294,149 +304,116 @@ function drawBackdropWash() {
 }
 
 function drawConfettiScene() {
-  const time = frameCount * 0.018;
-  const columns = 8;
-  const rows = 5;
-  const cellWidth = width / columns;
-  const cellHeight = height / rows;
-  const burst = map(sin(time * 0.7), -1, 1, 0.75, 1.25);
+  const time = frameCount * 0.012;
+  const unit = min(width, height);
 
+  noStroke();
+  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 150);
+  rect(width * 0.08, height * 0.1, width * 0.84, height * 0.78, 28);
+
+  push();
+  translate(width * 0.29, height * 0.34);
+  rotate(time * 0.9);
+  fill(POSTER_PALETTE.brick[0], POSTER_PALETTE.brick[1], POSTER_PALETTE.brick[2], 228);
   rectMode(CENTER);
-  ellipseMode(CENTER);
+  rect(0, 0, unit * 0.5, unit * 0.5);
+  fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 220);
+  ellipse(0, 0, unit * 0.22, unit * 0.22);
+  pop();
 
-  for (let gx = 0; gx < columns; gx += 1) {
-    for (let gy = 0; gy < rows; gy += 1) {
-      const centerX = cellWidth * (gx + 0.5);
-      const centerY = cellHeight * (gy + 0.5);
-      const localTime = time + gx * 0.35 + gy * 0.22;
-      const orbit = min(cellWidth, cellHeight) * 0.2 * burst;
-      const dotX = centerX + cos(localTime * 1.6) * orbit;
-      const dotY = centerY + sin(localTime * 1.2) * orbit * 0.7;
-      const petalColor = getPaletteCycle(localTime * 0.55 + (gx + gy) * 0.18);
-      const accentColor = getPaletteCycle(localTime * 0.55 + 1.7);
+  push();
+  translate(width * 0.72, height * 0.63);
+  rotate(-time * 0.75);
+  fill(POSTER_PALETTE.teal[0], POSTER_PALETTE.teal[1], POSTER_PALETTE.teal[2], 230);
+  rectMode(CENTER);
+  rect(0, 0, unit * 0.42, unit * 0.42);
+  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 245);
+  rect(0, 0, unit * 0.16, unit * 0.16);
+  pop();
 
-      noStroke();
-      fill(WES_PALETTE.cream[0], WES_PALETTE.cream[1], WES_PALETTE.cream[2], 30);
-      ellipse(centerX, centerY, cellWidth * 0.58, cellHeight * 0.5);
+  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 180);
+  strokeWeight(max(unit * 0.012, 4));
+  line(width * 0.08, height * 0.82, width * 0.92, height * 0.18);
+  line(width * 0.18, height * 0.1, width * 0.84, height * 0.9);
 
-      push();
-      translate(dotX, dotY);
-      rotate(localTime);
-      fill(petalColor[0], petalColor[1], petalColor[2], 178);
-      rect(0, 0, cellWidth * 0.18, cellHeight * 0.1, 12);
-      fill(accentColor[0], accentColor[1], accentColor[2], 220);
-      ellipse(0, 0, cellWidth * 0.11, cellWidth * 0.11);
-      pop();
-
-      stroke(WES_PALETTE.plum[0], WES_PALETTE.plum[1], WES_PALETTE.plum[2], 36);
-      strokeWeight(1);
-      line(centerX, centerY, dotX, dotY);
-    }
+  noStroke();
+  for (let i = 0; i < 6; i += 1) {
+    const bandX = width * (0.14 + i * 0.12);
+    const bandHeight = height * map(sin(time * 2 + i * 0.7), -1, 1, 0.18, 0.5);
+    fill(POSTER_PALETTE.rust[0], POSTER_PALETTE.rust[1], POSTER_PALETTE.rust[2], 185);
+    rect(bandX, height * 0.78 - bandHeight, width * 0.055, bandHeight);
   }
 
   rectMode(CORNER);
 }
 
 function drawNoiseRectScene() {
-  const time = frameCount * 0.012;
-  const stripeCount = 14;
-  const bandHeight = height / stripeCount;
+  const time = frameCount * 0.01;
+  const unit = min(width, height);
 
   noStroke();
+  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 120);
+  rect(width * 0.06, height * 0.08, width * 0.88, height * 0.84, 20);
 
-  for (let i = 0; i < stripeCount; i += 1) {
-    const y = i * bandHeight;
-    const offset = noise(noiseArvo + i * 0.12, time * 0.4) * width * 0.22;
-    const bandColor = getPaletteCycle(i * 0.33 + time * 0.4);
-    fill(bandColor[0], bandColor[1], bandColor[2], 62);
-    rect(-width * 0.1 + offset, y, width * 1.2, bandHeight * 0.9);
+  fill(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 220);
+  rect(0, height * 0.18, width, height * 0.1);
+  rect(0, height * 0.72, width, height * 0.08);
+
+  for (let i = 0; i < 5; i += 1) {
+    const slide = noise(noiseArvo + i * 0.2, time * 0.3) * width * 0.16;
+    fill(POSTER_PALETTE.brick[0], POSTER_PALETTE.brick[1], POSTER_PALETTE.brick[2], 215);
+    rect(width * (0.08 + i * 0.16) + slide, height * 0.26, width * 0.12, height * 0.48);
+    fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 205);
+    rect(width * (0.11 + i * 0.16) - slide * 0.22, height * 0.34, width * 0.05, height * 0.28);
   }
 
-  for (let i = 0; i < 28; i += 1) {
-    const n = noise(noiseArvo + i * 0.09, time * 0.23);
-    const x = width * n;
-    const y = (height / 27) * i + sin(time + i) * 12;
-    const tileWidth = map(noise(noiseArvo + i * 0.17, time * 0.6), 0, 1, width * 0.08, width * 0.22);
-    const tileHeight = bandHeight * map(sin(time * 1.3 + i * 0.4), -1, 1, 0.42, 1.4);
-    const tileColor = getPaletteCycle(time * 0.8 + i * 0.21 + 0.7);
-
-    fill(tileColor[0], tileColor[1], tileColor[2], 186);
-    rect(x - tileWidth / 2, y, tileWidth, tileHeight, 6);
-
-    stroke(WES_PALETTE.ink[0], WES_PALETTE.ink[1], WES_PALETTE.ink[2], 55);
-    strokeWeight(1);
-    line(x - tileWidth / 2, y + tileHeight / 2, x + tileWidth / 2, y + tileHeight / 2);
+  stroke(POSTER_PALETTE.steel[0], POSTER_PALETTE.steel[1], POSTER_PALETTE.steel[2], 170);
+  strokeWeight(max(unit * 0.008, 3));
+  for (let i = -2; i < 10; i += 1) {
+    const shift = sin(time * 1.6 + i * 0.4) * width * 0.04;
+    line(width * (i * 0.12) + shift, 0, width * (i * 0.12) + width * 0.24 + shift, height);
   }
 
-  noFill();
-  stroke(WES_PALETTE.cream[0], WES_PALETTE.cream[1], WES_PALETTE.cream[2], 100);
-  strokeWeight(2);
+  noStroke();
+  fill(POSTER_PALETTE.teal[0], POSTER_PALETTE.teal[1], POSTER_PALETTE.teal[2], 220);
+  rect(width * 0.58, height * 0.08, width * 0.28, height * 0.16);
+  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 240);
+  rect(width * 0.62, height * 0.12, width * 0.08, height * 0.08);
 
-  beginShape();
-  for (let x = 0; x <= width; x += width / 24) {
-    const y = height * 0.5 + sin(time * 1.4 + x * 0.02) * height * 0.08;
-    curveVertex(x, y);
-  }
-  endShape();
-
-  noiseArvo += 0.006;
+  noiseArvo += 0.004;
 }
 
 function drawNoiseEllipseScene() {
-  const time = frameCount * 0.01;
-  const centerX = width * (0.5 + sin(time * 0.45) * 0.06);
-  const centerY = height * (0.52 + cos(time * 0.32) * 0.04);
-  const ringCount = 7;
-  const maxSize = min(width, height) * 0.62;
+  const time = frameCount * 0.009;
+  const unit = min(width, height);
+  const centerX = width * (0.52 + sin(time * 0.4) * 0.03);
+  const centerY = height * 0.5;
 
+  noStroke();
+  fill(POSTER_PALETTE.paper[0], POSTER_PALETTE.paper[1], POSTER_PALETTE.paper[2], 128);
+  ellipse(centerX, centerY, unit * 0.95, unit * 0.95);
+
+  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 215);
+  strokeWeight(max(unit * 0.016, 6));
   noFill();
+  ellipse(centerX, centerY, unit * 0.82, unit * 0.82);
+  ellipse(centerX, centerY, unit * 0.54, unit * 0.54);
 
-  for (let i = 0; i < ringCount; i += 1) {
-    const ratio = i / (ringCount - 1);
-    const wobble = noise(noiseArvo + i * 0.21, time * 0.45);
-    const ringWidth = maxSize * (1 - ratio * 0.11);
-    const ringHeight = ringWidth * map(wobble, 0, 1, 0.68, 0.9);
-    const ringColor = getPaletteCycle(time * 0.65 + i * 0.38);
+  noStroke();
+  fill(POSTER_PALETTE.brick[0], POSTER_PALETTE.brick[1], POSTER_PALETTE.brick[2], 232);
+  arc(centerX, centerY, unit * 0.94, unit * 0.94, -HALF_PI + time, 0.15 + time, PIE);
+  fill(POSTER_PALETTE.mustard[0], POSTER_PALETTE.mustard[1], POSTER_PALETTE.mustard[2], 225);
+  arc(centerX, centerY, unit * 0.6, unit * 0.6, HALF_PI + time * 0.7, PI + time * 0.7, PIE);
+  fill(POSTER_PALETTE.teal[0], POSTER_PALETTE.teal[1], POSTER_PALETTE.teal[2], 216);
+  ellipse(centerX + cos(time * 1.5) * unit * 0.18, centerY + sin(time * 1.2) * unit * 0.1, unit * 0.18, unit * 0.18);
 
-    stroke(ringColor[0], ringColor[1], ringColor[2], 155 - i * 14);
-    strokeWeight(map(i, 0, ringCount - 1, 4.2, 1.4));
-    ellipse(
-      centerX + sin(time * 1.2 + i) * width * 0.018,
-      centerY + cos(time * 1.1 + i * 0.7) * height * 0.02,
-      ringWidth,
-      ringHeight
-    );
-  }
+  stroke(POSTER_PALETTE.coal[0], POSTER_PALETTE.coal[1], POSTER_PALETTE.coal[2], 180);
+  strokeWeight(max(unit * 0.01, 4));
+  line(width * 0.1, height * 0.22, width * 0.9, height * 0.22);
+  line(width * 0.18, height * 0.78, width * 0.82, height * 0.78);
+  line(centerX, height * 0.12, centerX, height * 0.88);
 
-  const orbitCount = 10;
-  for (let i = 0; i < orbitCount; i += 1) {
-    const orbitTime = time * (0.8 + i * 0.05);
-    const radiusX = maxSize * (0.22 + i * 0.033);
-    const radiusY = radiusX * 0.54;
-    const x = centerX + cos(orbitTime + i * 0.7) * radiusX;
-    const y = centerY + sin(orbitTime * 1.2 + i * 0.5) * radiusY;
-    const satelliteColor = getPaletteCycle(orbitTime + i * 0.28 + 2.1);
-
-    noStroke();
-    fill(satelliteColor[0], satelliteColor[1], satelliteColor[2], 210);
-    ellipse(x, y, maxSize * 0.04, maxSize * 0.04);
-    fill(WES_PALETTE.cream[0], WES_PALETTE.cream[1], WES_PALETTE.cream[2], 120);
-    ellipse(x, y, maxSize * 0.018, maxSize * 0.018);
-  }
-
-  stroke(WES_PALETTE.plum[0], WES_PALETTE.plum[1], WES_PALETTE.plum[2], 32);
-  strokeWeight(1);
-  for (let i = 0; i < 12; i += 1) {
-    const angle = (TWO_PI / 12) * i + time * 0.2;
-    line(
-      centerX + cos(angle) * maxSize * 0.12,
-      centerY + sin(angle) * maxSize * 0.08,
-      centerX + cos(angle) * maxSize * 0.38,
-      centerY + sin(angle) * maxSize * 0.25
-    );
-  }
-
-  noiseArvo += 0.003;
+  noiseArvo += 0.002;
 }
 
 function getPaletteCycle(value) {
@@ -591,12 +568,9 @@ function updateMainButtonLabel() {
 
 function updateWritingUI() {
   const languageContent = LANGUAGE_CONTENT[kieli];
-  const contextualPlaceholder = currentPrompt
-    ? `${languageContent.writingPlaceholder}\n\n${currentPrompt.when}\n${currentPrompt.kind}\n${currentPrompt.what}`
-    : languageContent.writingPlaceholder;
 
   writingLabel.html(languageContent.writingLabel);
-  writingInput.attribute("placeholder", contextualPlaceholder);
+  writingInput.attribute("placeholder", languageContent.writingPlaceholder);
 }
 
 function bindWritingPersistence() {
